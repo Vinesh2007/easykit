@@ -3,41 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Word Counter</title>
+  <title>Word Counter — EasyKit</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Word Counter</h1>
-    <textarea id="textInput" placeholder="Enter or paste your text here..."></textarea>
-    <div class="stats">
-      <div class="stat">
-        <span class="label">Words:</span>
-        <span class="value" id="wordCount">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">Characters:</span>
-        <span class="value" id="charCount">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">Characters (no spaces):</span>
-        <span class="value" id="charCountNoSpaces">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">Sentences:</span>
-        <span class="value" id="sentenceCount">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">Paragraphs:</span>
-        <span class="value" id="paragraphCount">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">Reading Time:</span>
-        <span class="value" id="readingTime">0 min</span>
-      </div>
-    </div>
-    <button id="clearBtn" class="clear-btn">Clear</button>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Word Counter</span>
   </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value" id="stat-words">0</span>
+      <span class="stat-label">Words</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="stat-chars">0</span>
+      <span class="stat-label">Chars</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="stat-chars-no">0</span>
+      <span class="stat-label">No Spaces</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" id="stat-sentences">0</span>
+      <span class="stat-label">Sentences</span>
+    </div>
+  </div>
+
+  <!-- Extra Stats -->
+  <div class="extra-stats">
+    <div class="extra-row">
+      <span class="extra-label">Paragraphs</span>
+      <span class="extra-value" id="stat-para">0</span>
+    </div>
+    <div class="extra-row">
+      <span class="extra-label">Reading Time</span>
+      <span class="extra-value" id="stat-read">0 sec</span>
+    </div>
+    <div class="extra-row">
+      <span class="extra-label">Avg Word Length</span>
+      <span class="extra-value" id="stat-avg">0</span>
+    </div>
+  </div>
+
+  <!-- Textarea -->
+  <div class="textarea-section">
+    <textarea
+      id="text-input"
+      class="text-input"
+      placeholder="Start typing or paste your text here..."
+      spellcheck="true"
+    ></textarea>
+    <button class="btn-clear" id="btn-clear">✕ Clear</button>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

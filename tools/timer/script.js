@@ -1,76 +1,197 @@
-const timerDisplay = document.getElementById('timerDisplay');
-const hoursInput = document.getElementById('hours');
-const minutesInput = document.getElementById('minutes');
-const secondsInput = document.getElementById('seconds');
-const startBtn = document.getElementById('startBtn');
-const pauseBtn = document.getElementById('pauseBtn');
-const resetBtn = document.getElementById('resetBtn');
+document.addEventListener('DOMContentLoaded', () => {
 
-let totalSeconds = 0;
-let isRunning = false;
-let timerInterval = null;
+  // ── Elements ──
+  const tabTimer      = document.getElementById('tab-timer');
+  const tabStopwatch  = document.getElementById('tab-stopwatch');
+  const sectionTimer  = document.getElementById('section-timer');
+  const sectionSW     = document.getElementById('section-stopwatch');
 
-startBtn.addEventListener('click', start);
-pauseBtn.addEventListener('click', pause);
-resetBtn.addEventListener('click', reset);
+  // ── Tab Switch ──
+  tabTimer.addEventListener('click', () => {
+    tabTimer.classList.add('active');
+    tabStopwatch.classList.remove('active');
+    sectionTimer.classList.remove('hidden');
+    sectionSW.classList.add('hidden');
+  });
 
-function start() {
-  if (isRunning) return;
-  
-  if (totalSeconds === 0) {
-    const h = parseInt(hoursInput.value) || 0;
-    const m = parseInt(minutesInput.value) || 0;
-    const s = parseInt(secondsInput.value) || 0;
-    totalSeconds = h * 3600 + m * 60 + s;
+  tabStopwatch.addEventListener('click', () => {
+    tabStopwatch.classList.add('active');
+    tabTimer.classList.remove('active');
+    sectionSW.classList.remove('hidden');
+    sectionTimer.classList.add('hidden');
+  });
+
+  // ════════════════════════════
+  // ── TIMER ──
+  // ════════════════════════════
+  const timerDisplay  = document.getElementById('timer-display');
+  const timerProgress = document.getElementById('timer-progress');
+  const btnTimerStart = document.getElementById('btn-timer-start');
+  const btnTimerReset = document.getElementById('btn-timer-reset');
+  const inputHours    = document.getElementById('input-hours');
+  const inputMinutes  = document.getElementById('input-minutes');
+  const inputSeconds  = document.getElementById('input-seconds');
+
+  let timerInterval   = null;
+  let timerTotal      = 0;
+  let timerRemaining  = 0;
+  let timerRunning    = false;
+
+  function formatTimerTime(secs) {
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
   }
-  
-  if (totalSeconds <= 0) {
-    alert('Please enter a valid time');
-    return;
+
+  function updateTimerProgress() {
+    const pct = timerTotal > 0
+      ? (timerRemaining / timerTotal) * 100
+      : 100;
+    timerProgress.style.width = pct + '%';
   }
-  
-  isRunning = true;
-  hoursInput.disabled = true;
-  minutesInput.disabled = true;
-  secondsInput.disabled = true;
-  
-  timerInterval = setInterval(() => {
-    totalSeconds--;
-    updateDisplay();
-    
-    if (totalSeconds <= 0) {
+
+  function startTimer() {
+    if (!timerRunning) {
+      // Fresh start
+      if (timerRemaining === 0) {
+        const h = parseInt(inputHours.value)   || 0;
+        const m = parseInt(inputMinutes.value) || 0;
+        const s = parseInt(inputSeconds.value) || 0;
+        timerTotal     = h * 3600 + m * 60 + s;
+        timerRemaining = timerTotal;
+      }
+      if (timerRemaining <= 0) return;
+
+      timerRunning = true;
+      btnTimerStart.textContent = 'Pause';
+      btnTimerStart.classList.add('pause');
+      timerDisplay.classList.add('running');
+
+      timerInterval = setInterval(() => {
+        timerRemaining--;
+        timerDisplay.textContent = formatTimerTime(timerRemaining);
+        updateTimerProgress();
+
+        if (timerRemaining <= 0) {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          timerDisplay.classList.remove('running');
+          timerDisplay.classList.add('finished');
+          timerDisplay.textContent = '00:00:00';
+          btnTimerStart.textContent = 'Start';
+          btnTimerStart.classList.remove('pause');
+          timerProgress.style.width = '0%';
+        }
+      }, 1000);
+
+    } else {
+      // Pause
       clearInterval(timerInterval);
-      isRunning = false;
-      alert('Time is up!');
-      reset();
+      timerRunning = false;
+      btnTimerStart.textContent = 'Resume';
+      btnTimerStart.classList.remove('pause');
+      timerDisplay.classList.remove('running');
     }
-  }, 1000);
-}
+  }
 
-function pause() {
-  if (!isRunning) return;
-  isRunning = false;
-  clearInterval(timerInterval);
-}
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerRunning   = false;
+    timerRemaining = 0;
+    timerTotal     = 0;
+    timerDisplay.textContent  = '00:00:00';
+    timerProgress.style.width = '100%';
+    btnTimerStart.textContent = 'Start';
+    btnTimerStart.classList.remove('pause');
+    timerDisplay.classList.remove('running', 'finished');
+    inputHours.value   = '';
+    inputMinutes.value = '';
+    inputSeconds.value = '';
+  }
 
-function reset() {
-  isRunning = false;
-  clearInterval(timerInterval);
-  totalSeconds = 0;
-  hoursInput.disabled = false;
-  minutesInput.disabled = false;
-  secondsInput.disabled = false;
-  hoursInput.value = '';
-  minutesInput.value = '';
-  secondsInput.value = '';
-  updateDisplay();
-}
+  btnTimerStart.addEventListener('click', startTimer);
+  btnTimerReset.addEventListener('click', resetTimer);
 
-function updateDisplay() {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  
-  timerDisplay.textContent = 
-    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
+  // ════════════════════════════
+  // ── STOPWATCH ──
+  // ════════════════════════════
+  const swDisplay  = document.getElementById('stopwatch-display');
+  const msDisplay  = document.getElementById('ms-display');
+  const btnSwStart = document.getElementById('btn-sw-start');
+  const btnSwLap   = document.getElementById('btn-sw-lap');
+  const btnSwReset = document.getElementById('btn-sw-reset');
+  const lapList    = document.getElementById('lap-list');
+
+  let swInterval  = null;
+  let swRunning   = false;
+  let swStartTime = 0;
+  let swElapsed   = 0;
+  let lapCount    = 0;
+
+  function formatSWTime(ms) {
+    const totalSecs = Math.floor(ms / 1000);
+    const h = Math.floor(totalSecs / 3600);
+    const m = Math.floor((totalSecs % 3600) / 60);
+    const s = totalSecs % 60;
+    return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  }
+
+  function startStopwatch() {
+    if (!swRunning) {
+      swRunning   = true;
+      swStartTime = Date.now() - swElapsed;
+      btnSwStart.textContent = 'Pause';
+      btnSwStart.classList.add('pause');
+      swDisplay.classList.add('running');
+
+      swInterval = setInterval(() => {
+        swElapsed = Date.now() - swStartTime;
+        swDisplay.textContent = formatSWTime(swElapsed);
+        msDisplay.textContent = '.' + String(swElapsed % 1000).padStart(3, '0');
+      }, 50);
+
+    } else {
+      clearInterval(swInterval);
+      swRunning = false;
+      btnSwStart.textContent = 'Resume';
+      btnSwStart.classList.remove('pause');
+      swDisplay.classList.remove('running');
+    }
+  }
+
+  function lapStopwatch() {
+    if (!swRunning) return;
+    lapCount++;
+    const item = document.createElement('div');
+    item.className = 'lap-item';
+    item.innerHTML = `
+      <span class="lap-label">Lap ${lapCount}</span>
+      <span class="lap-time">${formatSWTime(swElapsed)}.${String(swElapsed % 1000).padStart(3,'0')}</span>
+    `;
+    lapList.prepend(item);
+  }
+
+  function resetStopwatch() {
+    clearInterval(swInterval);
+    swRunning   = false;
+    swElapsed   = 0;
+    lapCount    = 0;
+    swDisplay.textContent = '00:00:00';
+    msDisplay.textContent = '.000';
+    lapList.innerHTML     = '';
+    btnSwStart.textContent = 'Start';
+    btnSwStart.classList.remove('pause');
+    swDisplay.classList.remove('running');
+  }
+
+  btnSwStart.addEventListener('click', startStopwatch);
+  btnSwLap.addEventListener('click', lapStopwatch);
+  btnSwReset.addEventListener('click', resetStopwatch);
+
+  // ── Back Button ──
+  document.getElementById('btn-back').addEventListener('click', () => {
+    window.location.href = '../../popup.html';
+  });
+
+});

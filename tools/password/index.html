@@ -3,45 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Password Generator</title>
+  <title>Password Generator — EasyKit</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Password Generator</h1>
-    <div class="generator">
-      <div class="output">
-        <input type="text" id="passwordOutput" readonly>
-        <button id="copyBtn" class="copy-btn">Copy</button>
-      </div>
-      <div class="options">
-        <label class="checkbox">
-          <input type="checkbox" id="uppercase" checked>
-          <span>Uppercase (A-Z)</span>
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" id="lowercase" checked>
-          <span>Lowercase (a-z)</span>
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" id="numbers" checked>
-          <span>Numbers (0-9)</span>
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" id="symbols" checked>
-          <span>Symbols (!@#...)</span>
-        </label>
-      </div>
-      <div class="length">
-        <label for="length">Password Length:</label>
-        <div class="length-control">
-          <input type="range" id="length" min="8" max="32" value="16">
-          <span id="lengthValue">16</span>
-        </div>
-      </div>
-      <button id="generateBtn" class="generate-btn">Generate Password</button>
-    </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Password Generator</span>
   </div>
+
+  <!-- Password Display -->
+  <div class="password-box">
+    <span id="password-output" class="password-text">Click Generate</span>
+    <button class="btn-copy" id="btn-copy">Copy</button>
+  </div>
+
+  <!-- Strength Bar -->
+  <div class="strength-row">
+    <span class="strength-label">Strength</span>
+    <div class="strength-bar">
+      <div class="strength-fill" id="strength-fill"></div>
+    </div>
+    <span class="strength-text" id="strength-text">—</span>
+  </div>
+
+  <!-- Options -->
+  <div class="options">
+
+    <!-- Length -->
+    <div class="option-row">
+      <label class="option-label">Length</label>
+      <div class="length-control">
+        <input
+          type="range"
+          id="length-slider"
+          class="slider"
+          min="6"
+          max="32"
+          value="12"
+        />
+        <span class="length-value" id="length-value">12</span>
+      </div>
+    </div>
+
+    <!-- Checkboxes -->
+    <div class="option-row">
+      <label class="option-label">Uppercase</label>
+      <label class="toggle">
+        <input type="checkbox" id="opt-upper" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <label class="option-label">Lowercase</label>
+      <label class="toggle">
+        <input type="checkbox" id="opt-lower" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <label class="option-label">Numbers</label>
+      <label class="toggle">
+        <input type="checkbox" id="opt-numbers" checked />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="option-row">
+      <label class="option-label">Symbols</label>
+      <label class="toggle">
+        <input type="checkbox" id="opt-symbols" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+  </div>
+
+  <!-- Generate Button -->
+  <div class="bottom">
+    <button class="btn-generate" id="btn-generate">Generate Password</button>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

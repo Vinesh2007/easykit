@@ -1,12 +1,22 @@
 {
   "manifest_version": 3,
-  "name": "QuickKit",
+  "name": "EasyKit",
   "version": "1.0.0",
-  "description": "Floating offline toolkit on every webpage.",
+  "description": "Your all-in-one offline toolkit — Calculator, QR Generator, Unit Converter, World Clock, Timer, Password Generator, Color Picker, Word Counter and Quick Notes.",
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "EasyKit",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
 
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
     "128": "icons/icon128.png"
   },
 
@@ -14,34 +24,9 @@
     "storage"
   ],
 
-  "host_permissions": [
-    "<all_urls>"
-  ],
-
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": [
-        "content.js"
-      ],
-      "css": [
-        "content.css"
-      ],
-      "run_at": "document_idle"
-    }
-  ],
-
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "widget/*",
-        "tools/*"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
-
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  },
+
+  "minimum_chrome_version": "88"
 }

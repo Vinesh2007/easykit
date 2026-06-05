@@ -3,24 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timer</title>
+  <title>Timer — EasyKit</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Timer</h1>
-    <div class="timer-display" id="timerDisplay">00:00:00</div>
-    <div class="input-section">
-      <input type="number" id="hours" placeholder="Hours" min="0">
-      <input type="number" id="minutes" placeholder="Minutes" min="0" max="59">
-      <input type="number" id="seconds" placeholder="Seconds" min="0" max="59">
-    </div>
-    <div class="buttons">
-      <button id="startBtn" class="btn start">Start</button>
-      <button id="pauseBtn" class="btn pause">Pause</button>
-      <button id="resetBtn" class="btn reset">Reset</button>
-    </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Timer & Stopwatch</span>
   </div>
+
+  <!-- Mode Tabs -->
+  <div class="tabs">
+    <button class="tab active" id="tab-timer">Timer</button>
+    <button class="tab" id="tab-stopwatch">Stopwatch</button>
+  </div>
+
+  <!-- ── TIMER SECTION ── -->
+  <div class="section" id="section-timer">
+
+    <!-- Time Input -->
+    <div class="time-input-row">
+      <div class="time-input-group">
+        <input type="number" id="input-hours" class="time-input" placeholder="00" min="0" max="99" />
+        <label class="time-input-label">HH</label>
+      </div>
+      <span class="time-sep">:</span>
+      <div class="time-input-group">
+        <input type="number" id="input-minutes" class="time-input" placeholder="00" min="0" max="59" />
+        <label class="time-input-label">MM</label>
+      </div>
+      <span class="time-sep">:</span>
+      <div class="time-input-group">
+        <input type="number" id="input-seconds" class="time-input" placeholder="00" min="0" max="59" />
+        <label class="time-input-label">SS</label>
+      </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="clock-display" id="timer-display">00:00:00</div>
+
+    <!-- Timer Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="timer-progress"></div>
+    </div>
+
+    <!-- Timer Controls -->
+    <div class="controls">
+      <button class="btn-control btn-start" id="btn-timer-start">Start</button>
+      <button class="btn-control btn-reset" id="btn-timer-reset">Reset</button>
+    </div>
+
+  </div>
+
+  <!-- ── STOPWATCH SECTION ── -->
+  <div class="section hidden" id="section-stopwatch">
+
+    <!-- Stopwatch Display -->
+    <div class="clock-display" id="stopwatch-display">00:00:00</div>
+    <div class="ms-display" id="ms-display">.000</div>
+
+    <!-- Stopwatch Controls -->
+    <div class="controls">
+      <button class="btn-control btn-start" id="btn-sw-start">Start</button>
+      <button class="btn-control btn-lap"   id="btn-sw-lap"  >Lap</button>
+      <button class="btn-control btn-reset" id="btn-sw-reset">Reset</button>
+    </div>
+
+    <!-- Lap List -->
+    <div class="lap-list" id="lap-list"></div>
+
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

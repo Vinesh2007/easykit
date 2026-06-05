@@ -3,35 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Color Picker</title>
+  <title>Color Picker — EasyKit</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Color Picker</h1>
-    <div class="picker-section">
-      <div class="color-display" id="colorDisplay"></div>
-      <input type="color" id="colorInput" value="#667eea">
-    </div>
-    <div class="color-info">
-      <div class="info-group">
-        <label>Hex:</label>
-        <input type="text" id="hexValue" readonly>
-        <button class="copy-btn" onclick="copyToClipboard('hexValue')">Copy</button>
-      </div>
-      <div class="info-group">
-        <label>RGB:</label>
-        <input type="text" id="rgbValue" readonly>
-        <button class="copy-btn" onclick="copyToClipboard('rgbValue')">Copy</button>
-      </div>
-      <div class="info-group">
-        <label>HSL:</label>
-        <input type="text" id="hslValue" readonly>
-        <button class="copy-btn" onclick="copyToClipboard('hslValue')">Copy</button>
-      </div>
-    </div>
-    <button id="randomBtn" class="random-btn">Random Color</button>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Color Picker</span>
   </div>
+
+  <!-- Color Preview -->
+  <div class="color-preview" id="color-preview">
+    <input type="color" id="color-input" value="#ff6a00" />
+  </div>
+
+  <!-- Color Values -->
+  <div class="color-values">
+
+    <div class="value-row">
+      <span class="value-label">HEX</span>
+      <span class="value-text" id="val-hex">#FF6A00</span>
+      <button class="btn-copy-val" data-target="val-hex">Copy</button>
+    </div>
+
+    <div class="value-row">
+      <span class="value-label">RGB</span>
+      <span class="value-text" id="val-rgb">rgb(255, 106, 0)</span>
+      <button class="btn-copy-val" data-target="val-rgb">Copy</button>
+    </div>
+
+    <div class="value-row">
+      <span class="value-label">HSL</span>
+      <span class="value-text" id="val-hsl">hsl(25, 100%, 50%)</span>
+      <button class="btn-copy-val" data-target="val-hsl">Copy</button>
+    </div>
+
+  </div>
+
+  <!-- Saved Colors -->
+  <div class="saved-section">
+    <div class="saved-header">
+      <span class="saved-title">Saved Colors</span>
+      <button class="btn-save" id="btn-save">+ Save</button>
+    </div>
+    <div class="saved-colors" id="saved-colors"></div>
+  </div>
+
+  <!-- Presets -->
+  <div class="presets-section">
+    <div class="saved-title" style="padding: 0 16px 8px;">Presets</div>
+    <div class="presets" id="presets"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

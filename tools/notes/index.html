@@ -3,22 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes</title>
+  <title>Quick Notes — EasyKit</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <h1>Notes</h1>
-      <button id="newNoteBtn" class="new-note-btn">+ New Note</button>
-      <div id="notesList" class="notes-list"></div>
-    </div>
-    <div class="editor">
-      <input type="text" id="noteTitle" placeholder="Note title...">
-      <textarea id="noteContent" placeholder="Start typing..."></textarea>
-      <button id="deleteBtn" class="delete-btn">Delete</button>
-    </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Quick Notes</span>
+    <button class="btn-new" id="btn-new">+ New</button>
   </div>
+
+  <!-- Note List View -->
+  <div id="view-list">
+
+    <div class="notes-list" id="notes-list"></div>
+
+    <div class="empty-state" id="empty-state">
+      <span class="empty-icon">🗒️</span>
+      <span class="empty-text">No notes yet. Tap + New to start.</span>
+    </div>
+
+  </div>
+
+  <!-- Note Editor View -->
+  <div id="view-editor">
+
+    <div class="editor-topbar">
+      <button id="btn-back-editor" class="btn-back-editor">← Notes</button>
+      <button id="btn-delete" class="btn-delete">🗑 Delete</button>
+    </div>
+
+    <input
+      type="text"
+      id="note-title"
+      class="note-title-input"
+      placeholder="Title"
+    />
+
+    <textarea
+      id="note-body"
+      class="note-body-input"
+      placeholder="Write your note here..."
+    ></textarea>
+
+    <div class="editor-footer">
+      <span class="save-status" id="save-status">Auto-saved</span>
+    </div>
+
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
