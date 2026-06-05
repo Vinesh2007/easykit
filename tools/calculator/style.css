@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ── */
+body {
+  width: 340px;
+  height: 480px;
+  font-family: 'DM Sans', sans-serif;
+  background-color: #0f0f10;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Top Bar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #1e1e22;
+}
+
+.back-btn {
+  background: #1a1a1e;
+  border: 1px solid #252528;
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s ease;
+  outline: none;
+}
+
+.back-btn:hover {
+  background: #252528;
+  border-color: #ff6a00;
+}
+
+.tool-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+/* ── Display ── */
+.display {
+  background: #0a0a0b;
+  padding: 16px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-height: 90px;
+  justify-content: flex-end;
+  border-bottom: 1px solid #1a1a1e;
+}
+
+.expr {
+  font-size: 13px;
+  font-weight: 400;
+  color: #555560;
+  min-height: 18px;
+  text-align: right;
+  word-break: break-all;
+}
+
+.result {
+  font-size: 40px;
+  font-weight: 300;
+  color: #ffffff;
+  text-align: right;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  word-break: break-all;
+}
+
+/* ── Button Grid ── */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px;
+  flex: 1;
+}
+
+/* ── Base Button ── */
+.btn {
+  border: none;
+  border-radius: 50%;
+  height: 58px;
+  width: 58px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.08s ease;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+
+.btn:active {
+  transform: scale(0.91);
+  opacity: 0.75;
+}
+
+/* ── Number Buttons ── */
+.btn-num {
+  background: #2a2a2e;
+  color: #ffffff;
+}
+
+.btn-num:hover {
+  background: #323238;
+}
+
+/* ── Operator Buttons ── */
+.btn-op {
+  background: #2b1a00;
+  color: #ff6a00;
+}
+
+.btn-op:hover {
+  background: #3a2400;
+}
+
+/* ── Equals Button ── */
+.btn-eq {
+  background: #ff6a00;
+  color: #000000;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.btn-eq:hover {
+  background: #ff7c1a;
+}
+
+/* ── Function Buttons ── */
+.btn-func {
+  background: #1e1e24;
+  color: #aaaaaf;
+  font-size: 14px;
+}
+
+.btn-func:hover {
+  background: #252530;
+}
+
+/* ── Clear Button ── */
+.btn-clear {
+  background: #2d1a1a;
+  color: #ff4500;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.btn-clear:hover {
+  background: #3a2020;
+}
+
+/* ── Zero Button — pill shape ── */
+.btn-zero {
+  grid-column: span 2;
+  width: 100%;
+  border-radius: 36px;
+  justify-self: stretch;
+  padding-left: 22px;
+  justify-content: flex-start;
+  font-size: 18px;
+}

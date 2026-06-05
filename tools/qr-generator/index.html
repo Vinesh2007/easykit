@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Generator — EasyKit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">QR Generator</span>
+  </div>
+
+  <!-- Input Section -->
+  <div class="input-section">
+    <label class="input-label">Enter URL or Text</label>
+    <input
+      type="text"
+      id="qr-input"
+      class="qr-input"
+      placeholder="https://example.com"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <button class="btn-generate" id="btn-generate">Generate QR</button>
+  </div>
+
+  <!-- QR Output -->
+  <div class="qr-output" id="qr-output">
+    <div class="qr-placeholder" id="qr-placeholder">
+      <span class="placeholder-icon">🔲</span>
+      <span class="placeholder-text">QR code will appear here</span>
+    </div>
+    <div id="qr-code"></div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions" id="actions">
+    <button class="btn-action" id="btn-download">⬇ Download</button>
+    <button class="btn-action btn-clear" id="btn-clear">✕ Clear</button>
+  </div>
+
+  <!-- Offline QR Library -->
+  <script src="qrcode.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

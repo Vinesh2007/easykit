@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter — EasyKit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">Unit Converter</span>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-category="length">Length</button>
+    <button class="tab" data-category="weight">Weight</button>
+    <button class="tab" data-category="temp">Temp</button>
+    <button class="tab" data-category="speed">Speed</button>
+    <button class="tab" data-category="area">Area</button>
+  </div>
+
+  <!-- Converter -->
+  <div class="converter">
+
+    <!-- From -->
+    <div class="input-group">
+      <label class="input-label">From</label>
+      <div class="input-row">
+        <input
+          type="number"
+          id="from-value"
+          class="value-input"
+          placeholder="0"
+          autocomplete="off"
+        />
+        <select id="from-unit" class="unit-select"></select>
+      </div>
+    </div>
+
+    <!-- Swap Button -->
+    <div class="swap-row">
+      <button class="btn-swap" id="btn-swap">⇅</button>
+    </div>
+
+    <!-- To -->
+    <div class="input-group">
+      <label class="input-label">To</label>
+      <div class="input-row">
+        <input
+          type="number"
+          id="to-value"
+          class="value-input"
+          placeholder="0"
+          readonly
+        />
+        <select id="to-unit" class="unit-select"></select>
+      </div>
+    </div>
+
+    <!-- Result Label -->
+    <div class="result-label" id="result-label"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

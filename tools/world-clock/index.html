@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Clock — EasyKit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button id="btn-back" class="back-btn">&#8592;</button>
+    <span class="tool-title">World Clock</span>
+  </div>
+
+  <!-- Local Time -->
+  <div class="local-time">
+    <div class="local-label">Your Local Time</div>
+    <div class="local-clock" id="local-clock">00:00:00</div>
+    <div class="local-date" id="local-date"></div>
+  </div>
+
+  <!-- Clock List -->
+  <div class="clock-list" id="clock-list">
+
+    <div class="clock-card" data-tz="America/New_York">
+      <div class="city-info">
+        <span class="city-flag">🇺🇸</span>
+        <div>
+          <div class="city-name">New York</div>
+          <div class="city-tz">EST / EDT</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-new-york">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="America/Los_Angeles">
+      <div class="city-info">
+        <span class="city-flag">🇺🇸</span>
+        <div>
+          <div class="city-name">Los Angeles</div>
+          <div class="city-tz">PST / PDT</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-los-angeles">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Europe/London">
+      <div class="city-info">
+        <span class="city-flag">🇬🇧</span>
+        <div>
+          <div class="city-name">London</div>
+          <div class="city-tz">GMT / BST</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-london">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Europe/Paris">
+      <div class="city-info">
+        <span class="city-flag">🇫🇷</span>
+        <div>
+          <div class="city-name">Paris</div>
+          <div class="city-tz">CET / CEST</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-paris">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Asia/Dubai">
+      <div class="city-info">
+        <span class="city-flag">🇦🇪</span>
+        <div>
+          <div class="city-name">Dubai</div>
+          <div class="city-tz">GST</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-dubai">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Asia/Kolkata">
+      <div class="city-info">
+        <span class="city-flag">🇮🇳</span>
+        <div>
+          <div class="city-name">India</div>
+          <div class="city-tz">IST</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-india">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Asia/Singapore">
+      <div class="city-info">
+        <span class="city-flag">🇸🇬</span>
+        <div>
+          <div class="city-name">Singapore</div>
+          <div class="city-tz">SGT</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-singapore">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Asia/Tokyo">
+      <div class="city-info">
+        <span class="city-flag">🇯🇵</span>
+        <div>
+          <div class="city-name">Tokyo</div>
+          <div class="city-tz">JST</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-tokyo">--:--</div>
+    </div>
+
+    <div class="clock-card" data-tz="Australia/Sydney">
+      <div class="city-info">
+        <span class="city-flag">🇦🇺</span>
+        <div>
+          <div class="city-name">Sydney</div>
+          <div class="city-tz">AEST / AEDT</div>
+        </div>
+      </div>
+      <div class="city-time" id="time-sydney">--:--</div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
