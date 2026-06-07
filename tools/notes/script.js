@@ -1,298 +1,175 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Tab Switch ──
-  const tabTimer     = document.getElementById('tab-timer');
-  const tabStopwatch = document.getElementById('tab-stopwatch');
-  const sectionTimer = document.getElementById('section-timer');
-  const sectionSW    = document.getElementById('section-stopwatch');
+  // ── Elements ──
+  const viewList      = document.getElementById('view-list');
+  const viewEditor    = document.getElementById('view-editor');
+  const notesList     = document.getElementById('notes-list');
+  const emptyState    = document.getElementById('empty-state');
+  const btnNew        = document.getElementById('btn-new');
+  const btnBackEditor = document.getElementById('btn-back-editor');
+  const btnDelete     = document.getElementById('btn-delete');
+  const noteTitle     = document.getElementById('note-title');
+  const noteBody      = document.getElementById('note-body');
+  const saveStatus    = document.getElementById('save-status');
+  const btnBack       = document.getElementById('btn-back');
 
-  tabTimer.addEventListener('click', () => {
-    tabTimer.classList.add('active');
-    tabStopwatch.classList.remove('active');
-    sectionTimer.classList.remove('hidden');
-    sectionSW.classList.add('hidden');
-  });
+  let notes     = [];
+  let activeId  = null;
+  let saveTimer = null;
 
-  tabStopwatch.addEventListener('click', () => {
-    tabStopwatch.classList.add('active');
-    tabTimer.classList.remove('active');
-    sectionSW.classList.remove('hidden');
-    sectionTimer.classList.add('hidden');
-  });
+  // ════════════════════════
+  // ── Storage ──
+  // ════════════════════════
 
-  // ── TIMER ──
-
-  const timerDisplay  = document.getElementById('timer-display');
-  const timerProgress = document.getElementById('timer-progress');
-  const btnTimerStart = document.getElementById('btn-timer-start');
-  const btnTimerReset = document.getElementById('btn-timer-reset');
-  const inputHours    = document.getElementById('input-hours');
-  const inputMinutes  = document.getElementById('input-minutes');
-  const inputSeconds  = document.getElementById('input-seconds');
-
-  let timerInterval  = null;
-  let timerTotal     = 0;
-  let timerRemaining = 0;
-  let timerRunning   = false;
-
-  // ── Format ──
-  function formatTimerTime(secs) {
-    const h = Math.floor(secs / 3600);
-    const m = Math.floor((secs % 3600) / 60);
-    const s = secs % 60;
-    return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
-  }
-
-  // ── Progress ──
-  function updateTimerProgress() {
-    const pct = timerTotal > 0
-      ? (timerRemaining / timerTotal) * 100
-      : 100;
-    timerProgress.style.width = pct + '%';
-  }
-
-  // ── Enable / Disable inputs ──
-  function setInputsEditable(editable) {
-    inputHours.disabled   = !editable;
-    inputMinutes.disabled = !editable;
-    inputSeconds.disabled = !editable;
-
-    // visual feedback
-    const opacity = editable ? '1' : '0.4';
-    inputHours.style.opacity   = opacity;
-    inputMinutes.style.opacity = opacity;
-    inputSeconds.style.opacity = opacity;
-  }
-
-  // ── Input validation ──
-  // Clamp values when user leaves input
-  inputHours.addEventListener('blur', () => {
-    let v = parseInt(inputHours.value) || 0;
-    v = Math.min(99, Math.max(0, v));
-    inputHours.value = v > 0 ? String(v).padStart(2, '0') : '';
-    updateDisplayFromInputs();
-  });
-
-  inputMinutes.addEventListener('blur', () => {
-    let v = parseInt(inputMinutes.value) || 0;
-    v = Math.min(59, Math.max(0, v));
-    inputMinutes.value = v > 0 ? String(v).padStart(2, '0') : '';
-    updateDisplayFromInputs();
-  });
-
-  inputSeconds.addEventListener('blur', () => {
-    let v = parseInt(inputSeconds.value) || 0;
-    v = Math.min(59, Math.max(0, v));
-    inputSeconds.value = v > 0 ? String(v).padStart(2, '0') : '';
-    updateDisplayFromInputs();
-  });
-
-  // ── Live preview display as user types ──
-  inputHours.addEventListener('input', updateDisplayFromInputs);
-  inputMinutes.addEventListener('input', updateDisplayFromInputs);
-  inputSeconds.addEventListener('input', updateDisplayFromInputs);
-
-  // ── Select all text on focus for easy editing ──
-  inputHours.addEventListener('focus', () => inputHours.select());
-  inputMinutes.addEventListener('focus', () => inputMinutes.select());
-  inputSeconds.addEventListener('focus', () => inputSeconds.select());
-
-  // ── Auto jump to next input ──
-  inputHours.addEventListener('keyup', (e) => {
-    if (inputHours.value.length >= 2) inputMinutes.focus();
-  });
-
-  inputMinutes.addEventListener('keyup', (e) => {
-    if (inputMinutes.value.length >= 2) inputSeconds.focus();
-  });
-
-  // ── Update display from inputs ──
-  function updateDisplayFromInputs() {
-    const h = parseInt(inputHours.value)   || 0;
-    const m = parseInt(inputMinutes.value) || 0;
-    const s = parseInt(inputSeconds.value) || 0;
-    timerDisplay.textContent = formatTimerTime(h * 3600 + m * 60 + s);
-    timerProgress.style.width = '100%';
-  }
-
-  // ── Start / Pause / Resume ──
-  function startTimer() {
-    if (!timerRunning) {
-
-      // Fresh start — read from inputs
-      if (timerRemaining === 0) {
-        const h = parseInt(inputHours.value)   || 0;
-        const m = parseInt(inputMinutes.value) || 0;
-        const s = parseInt(inputSeconds.value) || 0;
-        timerTotal     = h * 3600 + m * 60 + s;
-        timerRemaining = timerTotal;
-      }
-
-      if (timerRemaining <= 0) {
-        // Flash inputs to hint user to enter time
-        inputHours.style.borderColor   = '#ff4500';
-        inputMinutes.style.borderColor = '#ff4500';
-        inputSeconds.style.borderColor = '#ff4500';
-        setTimeout(() => {
-          inputHours.style.borderColor   = '#252528';
-          inputMinutes.style.borderColor = '#252528';
-          inputSeconds.style.borderColor = '#252528';
-        }, 1000);
-        return;
-      }
-
-      // Disable inputs while running
-      setInputsEditable(false);
-
-      timerRunning = true;
-      btnTimerStart.textContent = 'Pause';
-      btnTimerStart.classList.add('pause');
-      timerDisplay.classList.add('running');
-      timerDisplay.classList.remove('finished');
-
-      timerInterval = setInterval(() => {
-        timerRemaining--;
-        timerDisplay.textContent = formatTimerTime(timerRemaining);
-        updateTimerProgress();
-
-        if (timerRemaining <= 0) {
-          clearInterval(timerInterval);
-          timerRunning = false;
-          timerDisplay.classList.remove('running');
-          timerDisplay.classList.add('finished');
-          timerDisplay.textContent  = '00:00:00';
-          timerProgress.style.width = '0%';
-          btnTimerStart.textContent = 'Start';
-          btnTimerStart.classList.remove('pause');
-
-          // Re-enable inputs after finish
-          setInputsEditable(true);
-        }
-      }, 1000);
-
+  function loadNotes() {
+    // ← Safety check for chrome.storage
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.local.get(['easykit_notes'], (result) => {
+        notes = result.easykit_notes || [];
+        renderList();
+      });
     } else {
-      // Pause
-      clearInterval(timerInterval);
-      timerRunning = false;
-      btnTimerStart.textContent = 'Resume';
-      btnTimerStart.classList.remove('pause');
-      timerDisplay.classList.remove('running');
+      // Fallback for testing outside extension
+      const stored = localStorage.getItem('easykit_notes');
+      notes = stored ? JSON.parse(stored) : [];
+      renderList();
     }
   }
 
-  // ── Reset ──
-  function resetTimer() {
-    clearInterval(timerInterval);
-    timerRunning   = false;
-    timerRemaining = 0;
-    timerTotal     = 0;
-
-    // Clear display
-    timerDisplay.textContent  = '00:00:00';
-    timerProgress.style.width = '100%';
-
-    // Reset button
-    btnTimerStart.textContent = 'Start';
-    btnTimerStart.classList.remove('pause');
-    timerDisplay.classList.remove('running', 'finished');
-
-    // Clear inputs and re-enable
-    inputHours.value   = '';
-    inputMinutes.value = '';
-    inputSeconds.value = '';
-    setInputsEditable(true);
-
-    // Focus hours input for immediate editing
-    setTimeout(() => inputHours.focus(), 50);
-  }
-
-  btnTimerStart.addEventListener('click', startTimer);
-  btnTimerReset.addEventListener('click', resetTimer);
-
-  // ── STOPWATCH ──
-
-  const swDisplay  = document.getElementById('stopwatch-display');
-  const msDisplay  = document.getElementById('ms-display');
-  const btnSwStart = document.getElementById('btn-sw-start');
-  const btnSwLap   = document.getElementById('btn-sw-lap');
-  const btnSwReset = document.getElementById('btn-sw-reset');
-  const lapList    = document.getElementById('lap-list');
-
-  let swInterval  = null;
-  let swRunning   = false;
-  let swStartTime = 0;
-  let swElapsed   = 0;
-  let lapCount    = 0;
-
-  function formatSWTime(ms) {
-    const totalSecs = Math.floor(ms / 1000);
-    const h = Math.floor(totalSecs / 3600);
-    const m = Math.floor((totalSecs % 3600) / 60);
-    const s = totalSecs % 60;
-    return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
-  }
-
-  function startStopwatch() {
-    if (!swRunning) {
-      swRunning   = true;
-      swStartTime = Date.now() - swElapsed;
-      btnSwStart.textContent = 'Pause';
-      btnSwStart.classList.add('pause');
-      swDisplay.classList.add('running');
-
-      swInterval = setInterval(() => {
-        swElapsed = Date.now() - swStartTime;
-        swDisplay.textContent = formatSWTime(swElapsed);
-        msDisplay.textContent = '.' + String(swElapsed % 1000).padStart(3, '0');
-      }, 50);
-
+  function saveNotes() {
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.local.set({ easykit_notes: notes }, () => {
+        showSaved();
+      });
     } else {
-      clearInterval(swInterval);
-      swRunning = false;
-      btnSwStart.textContent = 'Resume';
-      btnSwStart.classList.remove('pause');
-      swDisplay.classList.remove('running');
+      // Fallback for testing outside extension
+      localStorage.setItem('easykit_notes', JSON.stringify(notes));
+      showSaved();
     }
   }
 
-  function lapStopwatch() {
-    if (!swRunning) return;
-    lapCount++;
-    const item = document.createElement('div');
-    item.className = 'lap-item';
-    item.innerHTML = `
-      <span class="lap-label">Lap ${lapCount}</span>
-      <span class="lap-time">
-        ${formatSWTime(swElapsed)}.${String(swElapsed % 1000).padStart(3,'0')}
-      </span>
-    `;
-    lapList.prepend(item);
+  function showSaved() {
+    saveStatus.textContent = 'Saved ✓';
+    saveStatus.classList.add('saved');
+    setTimeout(() => {
+      saveStatus.textContent = 'Auto-saved';
+      saveStatus.classList.remove('saved');
+    }, 2000);
   }
 
-  function resetStopwatch() {
-    clearInterval(swInterval);
-    swRunning             = false;
-    swElapsed             = 0;
-    lapCount              = 0;
-    swDisplay.textContent = '00:00:00';
-    msDisplay.textContent = '.000';
-    lapList.innerHTML     = '';
-    btnSwStart.textContent = 'Start';
-    btnSwStart.classList.remove('pause');
-    swDisplay.classList.remove('running');
+  // ════════════════════════
+  // ── Render List ──
+  // ════════════════════════
+
+  function renderList() {
+    notesList.innerHTML = '';
+
+    if (notes.length === 0) {
+      notesList.style.display  = 'none';
+      emptyState.style.display = 'flex';
+      return;
+    }
+
+    notesList.style.display  = 'flex';
+    emptyState.style.display = 'none';
+
+    notes.forEach(note => {
+      const card = document.createElement('div');
+      card.className = 'note-card';
+      card.innerHTML = `
+        <div class="note-card-title">${note.title || 'Untitled'}</div>
+        <div class="note-card-preview">${note.body  || 'No content'}</div>
+        <div class="note-card-date">${note.date}</div>
+      `;
+      card.addEventListener('click', () => openNote(note.id));
+      notesList.appendChild(card);
+    });
   }
 
-  btnSwStart.addEventListener('click', startStopwatch);
-  btnSwLap.addEventListener('click', lapStopwatch);
-  btnSwReset.addEventListener('click', resetStopwatch);
+  // ════════════════════════
+  // ── Note Actions ──
+  // ════════════════════════
 
-  // ── Back Button ──
-  document.getElementById('btn-back').addEventListener('click', () => {
+  function newNote() {
+    const note = {
+      id:    Date.now(),
+      title: '',
+      body:  '',
+      date:  getDate()
+    };
+    notes.unshift(note);
+    saveNotes();
+    openNote(note.id);
+  }
+
+  function openNote(id) {
+    activeId        = id;
+    const note      = notes.find(n => n.id === id);
+    if (!note) return;
+    noteTitle.value = note.title;
+    noteBody.value  = note.body;
+    showEditor();
+  }
+
+  function deleteNote() {
+    if (!activeId) return;
+    notes = notes.filter(n => n.id !== activeId);
+    saveNotes();
+    showList();
+  }
+
+  function autoSave() {
+    const note = notes.find(n => n.id === activeId);
+    if (!note) return;
+    note.title = noteTitle.value;
+    note.body  = noteBody.value;
+    note.date  = getDate();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNotes, 800);
+  }
+
+  function getDate() {
+    return new Date().toLocaleDateString('en-US', {
+      month: 'short',
+      day:   'numeric',
+      year:  'numeric'
+    });
+  }
+
+  // ════════════════════════
+  // ── View Switching ──
+  // ════════════════════════
+
+  function showEditor() {
+    viewList.style.display   = 'none';
+    viewEditor.style.display = 'flex';
+    btnNew.style.display     = 'none';
+    setTimeout(() => noteTitle.focus(), 50);  /* ← small delay fixes focus */
+  }
+
+  function showList() {
+    viewEditor.style.display = 'none';
+    viewList.style.display   = 'flex';
+    btnNew.style.display     = '';
+    activeId                 = null;
+    renderList();
+  }
+
+  // ════════════════════════
+  // ── Event Listeners ──
+  // ════════════════════════
+
+  btnNew.addEventListener('click', newNote);
+  btnBackEditor.addEventListener('click', showList);
+  btnDelete.addEventListener('click', deleteNote);
+  noteTitle.addEventListener('input', autoSave);
+  noteBody.addEventListener('input', autoSave);
+
+  btnBack.addEventListener('click', () => {
     window.location.href = '../../popup.html';
   });
 
   // ── Init ──
-  setInputsEditable(true);
-  inputHours.focus();
+  loadNotes();   /* ← always called, never skipped */
 
 });
