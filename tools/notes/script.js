@@ -17,12 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeId  = null;
   let saveTimer = null;
 
-  // ════════════════════════
   // ── Storage ──
-  // ════════════════════════
 
   function loadNotes() {
-    // ← Safety check for chrome.storage
     if (typeof chrome !== 'undefined' && chrome.storage) {
       chrome.storage.local.get(['easykit_notes'], (result) => {
         notes = result.easykit_notes || [];
@@ -57,9 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   }
 
-  // ════════════════════════
   // ── Render List ──
-  // ════════════════════════
 
   function renderList() {
     notesList.innerHTML = '';
@@ -86,9 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ════════════════════════
   // ── Note Actions ──
-  // ════════════════════════
 
   function newNote() {
     const note = {
@@ -136,15 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ════════════════════════
   // ── View Switching ──
-  // ════════════════════════
 
   function showEditor() {
     viewList.style.display   = 'none';
     viewEditor.style.display = 'flex';
     btnNew.style.display     = 'none';
-    setTimeout(() => noteTitle.focus(), 50);  /* ← small delay fixes focus */
+    setTimeout(() => noteTitle.focus(), 50); 
   }
 
   function showList() {
@@ -155,9 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderList();
   }
 
-  // ════════════════════════
   // ── Event Listeners ──
-  // ════════════════════════
 
   btnNew.addEventListener('click', newNote);
   btnBackEditor.addEventListener('click', showList);
@@ -169,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '../../popup.html';
   });
 
-  // ── Init ──
-  loadNotes();   /* ← always called, never skipped */
+  loadNotes(); 
 
 });
